@@ -1,6 +1,8 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      before_action :set_user, only: %i[show edit update destroy]
+
       def index
         @users = User.all
         render json: @users
@@ -41,6 +43,10 @@ module Api
         render json[:notice]='User was destroyed' 
       end
 
+      def login
+        @user = User.find_by(:email)
+        render json: { success: true } if @user.value?(@user.password)
+      end
       private
       def set_user
         @user = User.find(params[:id])
