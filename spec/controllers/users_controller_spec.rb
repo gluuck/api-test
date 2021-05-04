@@ -8,6 +8,5 @@ RSpec.describe Api::V1::UsersController , type: :controller do
     it "assigns @users" do         
       expect(user.).to  
     end
-  end
-  
+  end  
 end
