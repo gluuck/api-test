@@ -17,8 +17,7 @@ module Api
         render json: @user
       end
 
-      def edit
-        render json: @user
+      def edit        
       end
 
       def create
@@ -26,7 +25,7 @@ module Api
         if @user.save
           render json: @user
         else
-          render json: @user.errors, status: :unprocessable_entity 
+          render json[:notice]='User wasn\'t create'
         end
       end
 
@@ -34,7 +33,7 @@ module Api
         if @user.update(user_params)
           render json: @user
         else
-          render json: @user.errors, status: :unprocessable_entity 
+          render json[:notice]='User wasn\'t update'
         end
       end
 
@@ -45,13 +44,12 @@ module Api
 
       def login
         @user = User.find_by(:email)
-        render json: { success: true } if @user.value?(@user.password)
+        render json: @user if @user.value?(@user.password)
       end
       private
       def set_user
         @user = User.find(params[:id])
       end
-
       def user_params
         params.fetch(:user,{}).permit(:name, :email,:password)
       end
