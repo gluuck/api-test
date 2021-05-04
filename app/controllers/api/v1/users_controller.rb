@@ -40,7 +40,7 @@ module Api
 
       def destroy
         @user.destroy
-        render json[:notice]='User was destroyed' 
+        render json:{notice: 'User was destroyed' }
       end
 
       def login
