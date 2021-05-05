@@ -25,7 +25,7 @@ module Api
         if @user.save
           render json: @user
         else
-          render json[:notice]='User wasn\'t create'
+          render json:{error: 'User wasn\'t update'} 
         end
       end
 
@@ -33,13 +33,13 @@ module Api
         if @user.update(user_params)
           render json: @user
         else
-          render json[:notice]='User wasn\'t update'
+          render json:{error: 'User wasn\'t update'
         end
       end
 
       def destroy
         @user.destroy
-        render json[:notice]='User was destroyed' 
+        render json: {notice: 'User was destroyed'}
       end
 
       def login
