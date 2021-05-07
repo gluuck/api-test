@@ -48,8 +48,12 @@ module Api
       end
 
       def login
-        @user = User.find_by(:email)
-        render json: @user if @user.value?(@user.password)
+        @user = User.find_by(params[:email])
+        if @user.password == params[:password]
+          give_token
+        else
+          render json: {status: "error", message: 'Invalid password, please try again' }
+        end
       end
 
       private
