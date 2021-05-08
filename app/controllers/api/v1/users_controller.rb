@@ -7,7 +7,7 @@ module Api
       before_action :set_user, only: %i[show edit update destroy]
 
       def index
-        @users = User.limit(10)
+        @users = User.last(10)
         render json: @users
       end
 
@@ -64,7 +64,7 @@ module Api
 
       def user_params
 
-        params.require(:user).permit(:name, :email, :password, :password_digest)         
+        params.require(:user).permit(:name, :email, :password_digest)         
 
       end
     end

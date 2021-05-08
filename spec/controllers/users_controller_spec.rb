@@ -5,6 +5,5 @@ RSpec.describe Api::V1::UsersController , type: :controller do
 	before {get :index}
   describe 'GET #index'do
     
-  end
-  
+  end  
 end
