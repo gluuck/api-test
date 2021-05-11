@@ -28,7 +28,8 @@ module Api
         else
           render json: { 
             "success": false,
-            "message": "User wasn't found ",} 
+            "message": "User wasn't found ",
+          }, status: 404 
         end
       end
 
@@ -49,7 +50,7 @@ module Api
         else
           render json: {
             "success": false,
-            "message": "Error user was created before",
+            "message": "Error user cannot be created",
             "data": @user.errors 
             }, status: 422
         end
@@ -86,16 +87,20 @@ module Api
           render json: {
             "success": false,
             "message": "User wasn't found"
-          }, status: 422          
+          }, status: 404         
         end
       end
 
       def login
-        @user = User.find_by(params[:email])
-        if @user.password == params[:password]
+        @user = User.find_by(email: params[:email])
+        
+        if @user["password_digest"] == params[:password]
           render json: {status: succes}
         else
-          render json: {error: @user.errors }
+          render json: {
+            "success": false,
+            "message": "User wasn't found"
+          }, status: 404
         end
       end
 
