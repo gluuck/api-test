@@ -12,9 +12,9 @@ module Api
 
 			def show
 				if @user
-				render json: UserBlueprint.render(@user)
+				  render json: UserBlueprint.render(@user)
 				else
-					render json: { success: false, message: 'User wasn\'t found' }, status: 404
+					render json: { success: false, message: 'User wasn\'t found', data: {} }, status: 404
 				end
 			end
 
@@ -23,7 +23,7 @@ module Api
 				if @user.save
 					render json: UserBlueprint.render(@user)
 				else
-					render json: { succes: false, message: @user.errors}, status: 422
+					render json: { succes: false, message:'Cannot create user', data:  @user.errors  }, status: 422
 				end
 			end
 
@@ -31,7 +31,7 @@ module Api
 				if @user.update( user_params )
 					render json: UserBlueprint.render(@user)
 				else
-					render json: { succes: false, message: @user.errors }, status: 422
+					render json: { succes: false, message: 'Cannot update user' , data:  @user.errors  }, status: 422
 				end
 			end
 
