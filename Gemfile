@@ -15,6 +15,7 @@ gem 'rubocop-performance', require: false
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'jwt'
 gem 'blueprinter'
+gem 'oj'
 
 group :development, :test do
 	gem 'byebug', platforms: %i[mri mingw x64_mingw]

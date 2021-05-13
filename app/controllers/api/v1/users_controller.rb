@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'user_blueprint'
 module Api
 	module V1
 		class UsersController < ApplicationController
@@ -33,10 +32,6 @@ module Api
 				end
 			end
 
-			def new; end
-
-			def edit; end
-
 			def create
 				@user = User.new( user_params )
 				if @user.save
@@ -57,15 +52,14 @@ module Api
 			end
 
 			def update
-				if @user
-					@user.update( user_params )
+				if @user.update( user_params )
 					render json: {
 						"success": true,
 						"message": "User id:#{ @user.id } was updated",
 						"data": {
 							"category": @user
 						}
-					}
+					}					
 				else
 					render json: {
 						"success": false,
@@ -93,8 +87,7 @@ module Api
 
 			def login
 				@user = User.find_by( email: params[ :email ] )
-
-				if @user[ :password_digest ] == params[ :password ]
+				if @user.password == params[ :password ]
 					render json: { status: succes }
 				else
 					render json: {
