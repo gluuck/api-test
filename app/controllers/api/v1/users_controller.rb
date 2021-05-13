@@ -6,77 +6,41 @@ module Api
 			before_action :set_user, only: %i[show edit update destroy]
 
 			def index				
-			  users = User.last(10)
-			  render json: UserBlueprint.render(users)
+			  @users = User.last(10)
+			  render json: UserBlueprint.render(@users)
 			end
 
 			def show
 				if @user
-				render json: {
-				"success": true,
-				"message": "User id:#{ @user.id } ",
-				"data": {
-						"user": @user
-					}
-				}
+				render json: UserBlueprint.render(@user)
 				else
-					render json: {
-						"success": false,
-						"message": "User wasn't found "
-					}, status: 404
+					render json: { success: false, message: 'User wasn\'t found' }, status: 404
 				end
 			end
 
 			def create
 				@user = User.new( user_params )
 				if @user.save
-					render json: {
-					"success": true,
-					"message": "User id:#{ @user.id } was created ",
-					"data": {
-						"request": @user
-					}
-				}
+					render json: UserBlueprint.render(@user)
 				else
-					render json: {
-						"success": false,
-						"message": 'Error user cannot be created',
-						"data": @user.errors
-						}, status: 422
+					render json: { succes: false, message: @user.errors}, status: 422
 				end
 			end
 
 			def update
 				if @user.update( user_params )
-					render json: {
-						"success": true,
-						"message": "User id:#{ @user.id } was updated",
-						"data": {
-							"category": @user
-						}
-					}					
+					render json: UserBlueprint.render(@user)
 				else
-					render json: {
-						"success": false,
-						"message": 'Error',
-						"data": @user.errors
-						}, status: 422
+					render json: { succes: false, message: @user.errors }, status: 422
 				end
 			end
 
 			def destroy
 				if @user
 					@user.destroy
-					render json: {
-						"success": true,
-						"message": 'User was destroyed',
-						"data": {}
-					}
+					render json: { success: true,	message: 'User was destroyed'	}
 				else
-					render json: {
-						"success": false,
-						"message": "User wasn't found"
-					}, status: 404
+					render json: { succes: false, message: 'User not found' }, status: 404
 				end
 			end
 
@@ -96,7 +60,7 @@ module Api
 			end
 
 			def user_params
-				params.permit( :name, :email, :password )
+				params.permit(:id, :name, :email, :password )
 			end
 		end
 	end
