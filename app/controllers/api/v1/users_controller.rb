@@ -6,13 +6,8 @@ module Api
 			before_action :set_user, only: %i[show edit update destroy]
 
 			def index				
-			  @users = User.last(10)
-			  render json: {
-				"success": true,
-				"message": "Last 10 users",
-				"data": {
-				"requests": @users}
-				 }
+			  users = User.last(10)
+			  render json: UserBlueprint.render(users)
 			end
 
 			def show
@@ -88,12 +83,9 @@ module Api
 			def login
 				@user = User.find_by( email: params[ :email ] )
 				if @user.password == params[ :password ]
-					render json: { status: succes }
+					render json: { "succes": true }
 				else
-					render json: {
-						"success": false,
-						"message": "User wasn't found"
-					}, status: 404
+					render json: { "success": false	}
 				end
 			end
 
