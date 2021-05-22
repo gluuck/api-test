@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'user_blueprint'
 module Api
 	module V1
 		class UsersController < ApplicationController
@@ -8,99 +7,49 @@ module Api
 
 			def index				
 			  @users = User.last(10)
-			  render json: {
-				"success": true,
-				"message": "Last 10 users",
-				"data": {
-				"requests": @users}
-				 }
+			  render json: UserBlueprint.render(@users)
 			end
 
 			def show
 				if @user
-				render json: {
-				"success": true,
-				"message": "User id:#{ @user.id } ",
-				"data": {
-						"user": @user
-					}
-				}
+				  render json: UserBlueprint.render(@user)
 				else
-					render json: {
-						"success": false,
-						"message": "User wasn't found "
-					}, status: 404
+					render json: { success: false, message: 'User wasn\'t found', data: {} }, status: 404
 				end
 			end
-
-			def new; end
-
-			def edit; end
 
 			def create
 				@user = User.new( user_params )
 				if @user.save
-					render json: {
-					"success": true,
-					"message": "User id:#{ @user.id } was created ",
-					"data": {
-						"request": @user
-					}
-				}
+					render json: UserBlueprint.render(@user)
 				else
-					render json: {
-						"success": false,
-						"message": 'Error user cannot be created',
-						"data": @user.errors
-						}, status: 422
+					render json: { succes: false, message:'Cannot create user', data:  @user.errors  }, status: 422
 				end
 			end
 
 			def update
-				if @user
-					@user.update( user_params )
-					render json: {
-						"success": true,
-						"message": "User id:#{ @user.id } was updated",
-						"data": {
-							"category": @user
-						}
-					}
+				if @user.update( user_params )
+					render json: UserBlueprint.render(@user)
 				else
-					render json: {
-						"success": false,
-						"message": 'Error',
-						"data": @user.errors
-						}, status: 422
+					render json: { succes: false, message: 'Cannot update user' , data:  @user.errors  }, status: 422
 				end
 			end
 
 			def destroy
 				if @user
 					@user.destroy
-					render json: {
-						"success": true,
-						"message": 'User was destroyed',
-						"data": {}
-					}
+					render json: { success: true,	message: 'User was destroyed'	}
 				else
-					render json: {
-						"success": false,
-						"message": "User wasn't found"
-					}, status: 404
+					render json: { succes: false, message: 'User not found' }, status: 404
 				end
 			end
 
 			def login
 				@user = User.find_by( email: params[ :email ] )
-
-				if @user[ :password_digest ] == params[ :password ]
-					render json: { status: succes }
+				if @user.password == params[ :password ]
+					render json: { "succes": true }
 				else
-					render json: {
-						"success": false,
-						"message": "User wasn't found"
-					}, status: 404
+					render json: { "success": false	}
 				end
 			end
 
@@ -111,7 +60,7 @@ module Api
 			end
 
 			def user_params
-				params.permit( :name, :email, :password )
+				params.permit(:id, :name, :email, :password )
 			end
 		end
 	end
